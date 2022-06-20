@@ -1,132 +1,152 @@
 
 import { assert } from 'chai';
+
+const languageDropDown = $("[data-stid='site-selector']")
+const languageChangeHeaderButton = $("[data-stid='button-type-picker-trigger']");
+const textTravelh2 = $("h2[class='uitk-heading uitk-heading-5']");
+const deutschlandLanguageOption = $("option[value='300000752']")
+const acceptAllCookiesButon = $("[class*='accept-all']")
+const saveLanguageChangeButton = $("button[class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width']")
+const deutschlandPhonePreffix = $("option[value='+49,Germany']")
+const destinationsearchButton = $("button[class='uitk-button uitk-button-large uitk-button-only-icon uitk-button-primary']")
+const noDestinationInsertedTextError = $("div[class='uitk-field-message uitk-field-message-error uitk-error-message']")
+const destinationInputCursorButton = $("[data-stid='destination_form_field-menu-trigger']")
+const destinationInputLabel = $("[data-stid='destination_form_field-menu-input']")
+const prefilledDestinationButton = $("li:nth-child(1) > button")
+const calendarCheckInButton = $("[data-stid='open-date-picker']")
+const the27thDayfromJuneButton = $("div:nth-child(1) > table > tbody > tr:nth-child(5) > td:nth-child(2) > button")
+const the4thofJulyDayButton = $("//div[2]/table/tbody/tr[2]/td[2]/button")
+const goToTheCurentMonthButton = $("//div[2]/div[1]/button[1]")
+const doneCalendarButton = $("[data-stid='apply-date-picker']")
+const travelersNumberHeaderButton = $("//div/div/div[3]/div/div[1]/button")
+const travelersNumberInsertInput = $('#traveler_selector_adult_step_input-0')
+const doneTravelersInsertionButton = $('#traveler_selector_done_button')
+const sortResultsSelect = $('#sort')
+const priceSortOption = $("option[value='PRICE_LOW_TO_HIGH']")
+
+
+const selectorsMap = {travelTexth2: "h2[class='uitk-heading uitk-heading-5']"}
+
 class TestPageObject {
+
+    async clickElement(element){
+      await element.waitForClickable()
+      await element.click()
+    };
+
+    async getSelector(text){
+      const formattedText = await text.toLowerCase().replace(/ /g, '_')
+      console.log(`------------------------------------ selector ${formattedText}`)
+
+      return {
+        the_h2_paragraph: "h2[class='uitk-heading uitk-heading-5']",
+      }[formattedText]
+    }
+
+ 
+
     async openURL(url) {
       await browser.url(url);
     };
-
-
-    //validate the text of h2 "Travel with confidence"
-    async validateText(text){
-      const elem = await $("h2[class='uitk-heading uitk-heading-5']");
-      let elemText = await elem.getText()
-      assert.equal(elemText, text, 'Element does not have the expected text');
-    }
-
-    //change the language to deutsch
-    async changeLanguage(language){
-      
-      //select and click on English
-      const elemEnglish = await $("button[class='uitk-button uitk-button-medium uitk-button-tertiary global-navigation-nav-button']");
-      await elemEnglish.click();
-      
-      //select option Germany
-      const option = await $("option[value='300000752']")
-      await option.click();
-           
-      const acceptAllBtn = await $("button[class='osano-cm-accept-all osano-cm-buttons__button osano-cm-button osano-cm-button--type_accept']")
-      await acceptAllBtn.click();
-      
-      //click save
-      const buttonSave = await $("button[class='uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width']")
-      await buttonSave.click();
-
-      //check if Deutsch is present
-      const deutschUrl = 'https://de.hotels.com/?currency=EUR&eapid=752&locale=de_DE&pos=HCOM_DE&siteid=300000752&tpid=3102'
-      await browser.url(deutschUrl);
-
-      const elemDeutsch = await $("div[class='uitk-text uitk-type-300 uitk-text uitk-text-default-theme']");
-      const deutschText = await elemDeutsch.getText();
-      assert.equal(deutschText, language, `${deutschText} not the same with ${language}`);
-    }
-
-    async checkPrefix(preffix){
-      //check the Deutschland preffix +49
-      const elem = await $("option[value='+49,Germany']")
-      const elemText = await elem.getText();
-      assert.equal(elemText, preffix, "Phones are not matching")
-    }
-
     
+    //validate a text
+    async validateText(element,text){
+      const selector = await this.getSelector(element);
+      console.log(`------------------------------------ selector ${this.getSelector(element)}`)
+      console.log(`------------------------------------ selector ${await this.getSelector(element)}`)
+
+      const selectorGet = await $(selector).getText();
+      // console.log(`------------------------------------ selector ${$(selector)}`)
+      console.log(`------------------------------------ gettext  ${selectorGet}`)
+      
+      console.log(`------------------------------------ ${selectorsMap.travelTexth2}`)
+      assert.equal(selector, text, 'Element does not have the expected text');
+    }
+
+    //change the language 
+    async changeLanguage(language){
+      await languageChangeHeaderButton.click();
+      await languageDropDown.click();
+      await deutschlandLanguageOption.click();
+      await browser.pause(2000);
+
+      if (acceptAllCookiesButon.isExisting()){
+        await acceptAllCookiesButon.click();
+        await browser.pause(2000);
+      }
+
+      await saveLanguageChangeButton.click();
+      await browser.pause(5000)
+      assert.equal(await languageChangeHeaderButton.getText(), language, `The Language does not match with Deutsch`);
+    }
+    //check a phone preffix
+    async checkPrefix(preffix){
+      assert.equal(await deutschlandPhonePreffix.getText(), preffix, "Phones are not matching")
+    }
+    //check 
     async errorCheck(error) {
-      const searchButton = await $("button[class='uitk-button uitk-button-large uitk-button-only-icon uitk-button-primary']")
-      await searchButton.click();        
-      const casetaEroare = await (await $("div[class='uitk-typeahead-menu uitk-menu uitk-menu-mounted']")).isDisplayed();
-      const actualError = await $("div[class='uitk-field-message uitk-field-message-error uitk-error-message']")
-      const text = await actualError.getText();
-      assert.equal(text, error, "The text is not the same")
+      await destinationsearchButton.click();       
+      assert.equal(await noDestinationInsertedTextError.getText(), error, "The error text is not found")
     }
       
-
+    //check if the
       
       
-    // //Scenariu 4
-    // //random destination picker
-    // async bookHoliday(destination){
-    //   const destinationsArray = ["Copenhagen","Vienna","Brussels","Bucharest","Madrid","Valencia","Berlin"]    
+    //Scenariu 4
+    //random destination picker
 
-    //   //random destination selection function
-    //   function inputRandomDestination(arr){
-    //     let randomDest = Math.floor(Math.random() * arr.length);
-    //     inputAction.val(arr[randomDest]);
-    //   }
+    async searchForDestination(){
+      const destinationsArrayforRandomFunction = ["Copenhagen","Vienna","Brussels","Bucharest","Madrid","Valencia","Berlin"]
+      function inputRandomDestination(arr){
+        let randomDestinationSelected = Math.floor(Math.random() * arr.length);
+        return arr[randomDestinationSelected];
+      };
 
-    //   describe("Input random destination", () => {
-    //     it('should be inputed a random destination', async () => {
-    //       const input = await $("#location-field-destination")
-    //       const inputDestination = await input.setValue(inputRandomDestination(destinationsArray))
-    //       expectChai(destination).is.equal(inputDestination)
-    //     });
-    //   });
+      const randomDestinationPicked = inputRandomDestination(destinationsArrayforRandomFunction);   
+      await destinationInputCursorButton.click()
+      await destinationInputLabel.setValue(randomDestinationPicked)
+      await browser.pause(5000)
+      await prefilledDestinationButton.click()
+      const textDestination = await destinationInputLabel.getText()
+      console.log(`--------------------------------------------------------------- textul inserat? ${textDestination}`)
+      // assert.equal(randomDestinationPicked, destination, "the edestinations are not the same")
 
-    //   // booking a minimum one week in the future from the current day
-    //   describe("Book a week from the current day",()=>{
-    //     it("Should be selected 7 days ahead starting with the current day", async () => {
-    //       const today = new Date();
-    //       const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
-    //       const checkIn = await (await $(".uitk-faux-input uitk-form-field-trigger")).click();
-    //       const checkOut = await (await $(".uitk-date-picker-day edge")).click();
-    //       const lastDay = bookingPeriod.getDate();
+    }
 
-    //       expectChai(checkIn).is.equal(today);
-    //       expectChai(checkOut).is.equal(lastDay);
-    //     });
-    //   });
-
-    //   //input random nr of adults at Travelers section
-    //   describe("Input random nr of adults", () => {
-    //     it("should input the number of adults equal with the returned nr from the randomNrOfAdults function", async () => {
-    //       const randomNumber = Math.floor(Math.random() * 6);
-    //       const travelers = await (await $(".uitk-fake-input uitk-form-field-trigger")).click();
-    //       const valueTravelerInput = await $(".uitk-layout-flex-item uitk-step-input-value");
-          
-    //       //iteration to click + button the exact nr of times equal with random nr
-    //       for(let i=1; i<=randomNumber;i++){
-    //         const addTraveler = await (await $(".uitk-layout-flex-item uitk-step-input-touch-target")).click(i);
-    //         valueTravelerInput.setValue(addTraveler);
-    //       }
-          
-    //       //click Done and search buttons
-    //       const doneButton = await $(".uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary uitk-button-floating-full-width".click())
-    //       const searchButton = await $(".uitk-button uitk-button-large uitk-button-fullWidth uitk-button-has-text uitk-button-primary".click());
-
-    //       expectChai(valueTravelerInput).is.equal(randomNumber);
-    //     });
-    //   });
+    async setTheHolidayPeriod(date){
       
-    //   describe("filter and sort the price order", () => {
-    //     it("should sort the prices in undescending order", async() => {
-    //       const sortAndFilterButton = await (await $(".uitk-button uitk-button-medium uitk-button-fullWidth uitk-button-secondary")).click();
-    //       const sortBy = await (await $(".uitk-field-label is-visually-hidden")).click();
-    //       selectByVisibleText('Price');
-    //       let checkboxButton = await (await $(".uitk-layout-flex uitk-layout-flex-flex-wrap-nowrap uitk-switch uitk-checkbox")).isSelected();
-    //       //click the done button
-    //       const doneButton = await (await $("uitk-button uitk-button-large uitk-button-fullWidth uitk-button-primary uitk-button-floating-full-width")).click();
-    //     });
-    //   });        
-    // }
-  }
+      this.clickElement(calendarCheckInButton)
+      this.clickElement(goToTheCurentMonthButton)
+      await browser.pause(1000)
+      this.clickElement(the27thDayfromJuneButton)
+      let attributeOfStartDateButton = await the27thDayfromJuneButton.getAttribute('aria-label')
+      let dateSubstring = attributeOfStartDateButton.substring(0, 11)
+      await the4thofJulyDayButton.click()
+      await doneCalendarButton.click()
+      assert.equal(dateSubstring, date, "Dates ar not equal")
+    }
+      
+    async insertNumberOf() {
 
+      function randomNumberPicker(number) {
+        let randomNumber = Math.floor(Math.random() * number);
+        return randomNumber
+      }
+      const randomTravelersNumberToBeInserted = randomNumberPicker(8);
+      await travelersNumberHeaderButton.click()
+      await travelersNumberInsertInput.setValue(randomTravelersNumberToBeInserted)
+      await doneTravelersInsertionButton.waitForClickable({timeout: 2000})
+      await doneTravelersInsertionButton.click()
+    }
+      
+   async searchAndFilterResults(results) {
+    await destinationsearchButton.waitForClickable({timeout: 2000})
+    await destinationsearchButton.click()
+    await sortResultsSelect.click()
+    await priceSortOption.click()
+
+   } 
+}
 
 
  
