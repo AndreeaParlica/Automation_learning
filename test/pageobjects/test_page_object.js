@@ -205,7 +205,7 @@ class TestPageObject {
             console.log(`============ sunt in else ${current_page_text}`);
             previous_page.scrollIntoView();
             previous_page.click();
-            await browser.pause(3000);
+            await browser.pause(3000); // comentariu adaugat
           }
           current_page_text = await current_page.getText();
         }
