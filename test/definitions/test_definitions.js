@@ -1,12 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import TestPageObject from "../pageobjects/test_page_object.js";
 
- 
-Given(/^I access the URL "([^"]*)"$/, async function (url) {
-  await TestPageObject.openURL(url);
-});
-
-Then(/^I validate that the "([^"]*)" has the following text: "([^"]*)"$/, async function (element, text){
+Then(/^I validate that the "([^"]*)" has the following text: 5"([^"]*)"$/, async function (element, text){
   await TestPageObject.validateText(element, text);
 });
 
@@ -39,6 +34,27 @@ When(/^I insert a random number of travelers$/, async function (){
   await TestPageObject.insertNumberOf();
 });
 
-Then(/^I click the search button and view the filtered "([^"]*)"$/, async function (results){
-  await TestPageObject.searchAndFilterResults(results);
+When(/^I click the search button$/, async function (){
+  await TestPageObject.clickOnSearchButton();
 });
+When(/^I sort the results by price$/, async function (){
+  await TestPageObject.clickOnSortButton();
+});
+Then(/^I check that the hotels are sorted in ascending order by price$/, async function (){
+  await TestPageObject.checkThatHotelsAreSortedByPriceAscending();
+});
+
+///pt UKR
+When(/^I click on the button, I go to MyRequest page$/, async function (){
+  await TestPageObject.clickOnViewTourRequests();
+});
+
+
+When(/^I navigate to the last page and back to the first one$/, async function (){
+  await TestPageObject.navigateToLastAmazonPage();
+});
+
+When(/^I navigate to the page "([^"]*)" of the Amazon chairs page$/, async function (pageNumber){
+  await TestPageObject.navitageToNthPage(pageNumber);
+});
+
