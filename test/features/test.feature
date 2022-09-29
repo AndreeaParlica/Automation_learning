@@ -33,3 +33,12 @@ Feature: Homepage
       # Then I filter and sort the results
 
 
+# // const today = new Date();
+# // const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+# // console.log(bookingPeriod.getDate());const today = new Date();
+# // const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+# // console.log(bookingPeriod.getDate());const today = new Date();
+# // const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+# // console.log(bookingPeriod.getDate());const today = new Date();
+# // const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+# // console.log(bookingPeriod.getDate());

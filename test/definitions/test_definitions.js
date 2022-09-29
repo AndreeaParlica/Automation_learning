@@ -31,9 +31,15 @@ When(/^I search for a random destination$/, async function (){
   await TestPageObject.searchForDestination();
 });
 
-When(/^I book a holiday for 7 days starting with "([^"]*)"$/, async function (date){
-  await TestPageObject.setTheHolidayPeriod(date);
-});
+// const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());
 
 When(/^I insert a random number of travelers$/, async function (){
   await TestPageObject.insertNumberOf();
@@ -42,3 +48,13 @@ When(/^I insert a random number of travelers$/, async function (){
 Then(/^I click the search button and view the filtered "([^"]*)"$/, async function (results){
   await TestPageObject.searchAndFilterResults(results);
 });
+
+// const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());const today = new Date();
+// const bookingPeriod = new Date(new Date().setDate(today.getDate()+7));
+// console.log(bookingPeriod.getDate());
